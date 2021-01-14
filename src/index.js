@@ -6,14 +6,15 @@ import ImageApiService from './js/apiService.js';
 
 const refs = {
   searchForm: document.querySelector('#search-form'),
-  gallery: document.querySelector('.gallery'),
-  //   loadMore: document.querySelector(''),
+  gallery: document.querySelector('.js-gallery'),
+  loadMore: document.querySelector('.js-load_more'),
+  submitBtn: document.querySelector('.submit-form'),
 };
 
 const imageApiService = new ImageApiService();
 
 refs.searchForm.addEventListener('submit', onSearch);
-// refs.loadMore.addEventListener('click', onLoadMore);
+refs.loadMore.addEventListener('click', onLoadMore);
 
 function onSearch(event) {
   event.preventDefault();
@@ -25,12 +26,12 @@ function onSearch(event) {
   }
 
   imageApiService.resetPage();
-  imageApiService.fetchImages();
-  //         .then(hits => {
-  //     console.log(hits);
-  //     clearGallery();
-  //     updateMarcup(hits);
-  //   });
+  imageApiService.fetchImages().then(hits => {
+    // console.log(hits);
+    clearGallery();
+    updateMarcup(hits);
+  });
+  refs.submitBtn.setAttribute('class', 'is-hidden');
 }
 
 function updateMarcup(hits) {
@@ -39,6 +40,7 @@ function updateMarcup(hits) {
 
 function onLoadMore(e) {
   imageApiService.fetchImages().then(hits => updateMarcup(hits));
+  window.scrollBy(0, window.innerHeight);
 }
 
 function clearGallery() {
