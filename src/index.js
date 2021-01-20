@@ -1,48 +1,68 @@
 import './styles.css';
+import refs from './js/refs.js';
+import notifications from './js/notifications.js';
 import galleryTpl from './tamplates/galleryTpl.hbs';
 import ImageApiService from './js/apiService.js';
+// import modalImage from './js/modal.js';
+import LoadMoreBtn from './js/loadMore.js';
 
-// API key pixabay: 19851067 - 7c860a6e23d51e90a164e5364;
-
-const refs = {
-  searchForm: document.querySelector('#search-form'),
-  gallery: document.querySelector('.js-gallery'),
-  loadMore: document.querySelector('.js-load_more'),
-  submitBtn: document.querySelector('.submit-form'),
-};
-
+// console.log(refs);
+const loadMoreBtn = new LoadMoreBtn({
+  selector: '.js-load_more',
+  hidden: true,
+});
+// console.log(loadMoreBtn);
 const imageApiService = new ImageApiService();
 
 refs.searchForm.addEventListener('submit', onSearch);
-refs.loadMore.addEventListener('click', onLoadMore);
+loadMoreBtn.refs.button.addEventListener('click', fetchNewImages);
+refs.gallery.addEventListener('load', scrollImages);
 
 function onSearch(event) {
   event.preventDefault();
   //   console.log(event.currentTarget.elements.query.value);
   imageApiService.query = event.currentTarget.elements.query.value;
 
-  if (imageApiService.query === '') {
+  if (imageApiService.query.trim() === '') {
+    notifications.enterImageName();
+    clearGallery();
+    loadMoreBtn.hide();
     return;
   }
-
+  loadMoreBtn.show();
   imageApiService.resetPage();
-  imageApiService.fetchImages().then(hits => {
-    // console.log(hits);
-    clearGallery();
-    updateMarcup(hits);
-  });
-  refs.submitBtn.setAttribute('class', 'is-hidden');
+  clearGallery();
+  fetchNewImages();
 }
 
 function updateMarcup(hits) {
   refs.gallery.insertAdjacentHTML('beforeend', galleryTpl(hits));
 }
 
-function onLoadMore(e) {
-  imageApiService.fetchImages().then(hits => updateMarcup(hits));
-  window.scrollBy(0, window.innerHeight);
+function fetchNewImages() {
+  console.log(document.body.scrollHeight);
+  loadMoreBtn.disable();
+  imageApiService
+    .fetchImages()
+    .then(hits => {
+      loadMoreBtn.enable();
+      updateMarcup(hits);
+      scrollImages();
+      // const modalImg = document.querySelectorAll('img');
+      // console.log(modalImg);
+      // console.log(hits);
+      // modalImg.addEventListener('click', modalImage.show());
+    })
+    .catch(notifications.errorRequest);
 }
 
 function clearGallery() {
   refs.gallery.innerHTML = '';
+}
+
+function scrollImages() {
+  window.scrollTo({
+    top: refs.gallery.scrollHeight,
+    behavior: 'smooth',
+  });
 }
