@@ -40,17 +40,22 @@ function updateMarcup(hits) {
 }
 
 function fetchNewImages() {
-  console.log(document.body.scrollHeight);
+  // console.log(document.body.scrollHeight);
   loadMoreBtn.disable();
   imageApiService
     .fetchImages()
     .then(hits => {
+      if (hits.length === 0) {
+        notifications.notFound();
+        loadMoreBtn.hide();
+      }
+      // console.log(hits);
       loadMoreBtn.enable();
       updateMarcup(hits);
       scrollImages();
       // const modalImg = document.querySelectorAll('img');
       // console.log(modalImg);
-      // console.log(hits);
+
       // modalImg.addEventListener('click', modalImage.show());
     })
     .catch(notifications.errorRequest);
