@@ -13,10 +13,15 @@ const notFound = function notFound() {
     text: 'Image not found. Please check your request and try again!',
   });
 };
+const lastImages = function lastImg() {
+  PNotify.info({
+    text: 'These are all the images we found!',
+  });
+};
 const errorRequest = function errReq() {
   PNotify.error({
     text: 'Request error!',
   });
 };
 // console.log(errorRequest);
-export default { enterImageName, notFound, errorRequest };
+export default { enterImageName, notFound, lastImages, errorRequest };

@@ -1,8 +1,17 @@
-// import * as basicLightbox from 'basiclightbox';
+import * as basicLightbox from 'basiclightbox';
+import 'basiclightbox/dist/basicLightbox.min.css';
 
-// const createModalImg = basicLightbox.create(`
-//     <img src=${hits.largeImageURL} width="800" height="600">
-// `);
+function createModalImg(event) {
+  if (event.target.nodeName !== 'IMG') {
+    return;
+  }
+  const imgModalSrc = event.target.dataset.source;
+  const imgModalAlt = event.target.alt;
+  const instance = basicLightbox.create(`
+    <img src=${imgModalSrc}  alt=${imgModalAlt} width="800" height="600">
+`);
+  //   console.log(instance);
+  instance.show();
+}
 
-// // createModalImg.show();
-// export default createModalImg;
+export default createModalImg;

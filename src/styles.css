@@ -126,7 +126,6 @@ p {
   flex-wrap: wrap;
 }
 .photo-card {
-  /* display: flex; */
   width: calc((100% - 5px * 6) / 6);
   margin-right: 5px;
   margin-bottom: 5px;
@@ -135,33 +134,8 @@ p {
   width: 100%;
 }
 .stats {
-  /* display: flex; */
   font-size: 14px;
 }
 .material-icons {
   font-size: 14px;
-  /* width: 14px; */
-  /* height: 14px; */
 }
-/* .box {
-  width: 100%;
-}
-.country-box {
-  display: flex;
-  width: 100%;
-}
-.country-info {
-  width: calc((100% - 15px * 2) / 2);
-  list-style: none;
-  margin: 15px 0;
-}
-span.bold {
-  font-weight: 700;
-}
-.country-flag {
-  width: calc((100% - 15px * 2) / 2);
-  margin: 15px;
-}
-.lang-list {
-  list-style-type: disc;
-} */
